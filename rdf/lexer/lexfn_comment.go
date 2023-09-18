@@ -9,8 +9,8 @@ import (
 func LexComment(lexer *Lexer) LexFn {
 	// Remove the # at the start
 	lexer.Pos += len(lexertoken.COMMENT)
-	lexer.Start = lexer.Pos
 	lexer.SkipWhitespace()
+	lexer.Start = lexer.Pos
 
 	for {
 		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.NEWLINE) {

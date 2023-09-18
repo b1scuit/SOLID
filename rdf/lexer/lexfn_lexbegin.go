@@ -9,18 +9,16 @@ import (
 var LEXER_ERROR_UNEXPECTED_EOF = "Unexpected EOF"
 
 func LexBegin(lexer *Lexer) LexFn {
-	lexer.SkipWhitespace()
-
 	for {
+		lexer.SkipWhitespace()
 		l := lexer.InputToEnd()
 
-		if strings.HasPrefix(l, lexertoken.PREFIX) {
+		// @prefix or PREFIX
+		if strings.HasPrefix(l, lexertoken.PREFIX) || strings.HasPrefix(l, lexertoken.SPARQL_PREFIX) {
 			return LexPrefix
 		}
 
-		if strings.HasPrefix(l, lexertoken.SPARQL_PREFIX) {
-			return LexSparqlPrefix
-		}
+		// @base or BASE
 		if strings.HasPrefix(l, lexertoken.BASE) {
 			return LexBase
 		}
@@ -28,23 +26,37 @@ func LexBegin(lexer *Lexer) LexFn {
 		if strings.HasPrefix(l, lexertoken.SPARQL_BASE) {
 			return LexSparqlBase
 		}
+
+		// If the line is a straight <iri>
 		if strings.HasPrefix(l, lexertoken.START_IRI) {
 			return LexIri
 		}
 
-		if strings.HasPrefix(l, lexertoken.END_TRIPLE) {
-			return LexEndLine
-		}
-
+		// If we've arrived at a comment
 		if strings.HasPrefix(l, lexertoken.COMMENT) {
 			return LexComment
+		}
+
+		// If we're at the end of a line + some basic ignores
+		if strings.HasPrefix(l, lexertoken.END_TRIPLE) {
+			return LexEndLine
 		}
 
 		if strings.HasPrefix(l, lexertoken.NEWLINE) {
 			return LexNewLine
 		}
 
-		lexer.Ignore()
+		if strings.HasPrefix(l, lexertoken.OBJECT_LIST) {
+			return LexObjectList
+		}
+
+		if strings.HasPrefix(l, "\"") {
+			return LexLiteral
+		}
+
+		if lexer.IsCharacter() {
+			return LexPrefixedName
+		}
 
 		lexer.Inc()
 

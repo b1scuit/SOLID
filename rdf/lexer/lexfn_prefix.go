@@ -7,31 +7,18 @@ import (
 )
 
 func LexPrefix(lexer *Lexer) LexFn {
-	lexer.Start += len(lexertoken.PREFIX)
+	// Remove the @prefix or PREFIX statements
+	if strings.HasPrefix(lexer.InputToEnd(), lexertoken.PREFIX) {
+		lexer.Pos += len(lexertoken.PREFIX)
+	} else {
+		lexer.Pos += len(lexertoken.SPARQL_PREFIX)
+	}
+	// reset the counter
 	lexer.Ignore()
-	lexer.SkipWhitespace()
 	for {
 		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.PREFIX_END) {
 			lexer.Emit(lexertoken.TOKEN_PREFIX_NAME)
-
-			return LexIri
-		}
-
-		lexer.Inc()
-
-		if lexer.IsEOF() {
-			return lexer.Errorf(LEXER_ERROR_UNEXPECTED_EOF)
-		}
-	}
-}
-
-func LexSparqlPrefix(lexer *Lexer) LexFn {
-	lexer.SkipWhitespace()
-	lexer.Pos += len(lexertoken.SPARQL_PREFIX)
-	for {
-		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.PREFIX_END) {
 			lexer.Pos += len(lexertoken.PREFIX_END)
-			lexer.Emit(lexertoken.TOKEN_PREFIX_NAME)
 
 			return LexIri
 		}
@@ -43,6 +30,7 @@ func LexSparqlPrefix(lexer *Lexer) LexFn {
 		}
 	}
 }
+
 func LexBase(lexer *Lexer) LexFn {
 	lexer.SkipWhitespace()
 	lexer.Pos += len(lexertoken.BASE)

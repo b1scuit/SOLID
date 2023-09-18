@@ -37,7 +37,7 @@ type Lexer struct {
 func New(opts ...LexerOption) (*Lexer, error) {
 	l := &Lexer{
 		State:  LexBegin,
-		Tokens: make(chan lexertoken.Token, 3),
+		Tokens: make(chan lexertoken.Token),
 	}
 
 	for _, f := range opts {
@@ -152,6 +152,12 @@ func (this *Lexer) Next() rune {
 /*
 Return the next token from the channel
 */
+
+func (this *Lexer) NextToken() chan lexertoken.Token {
+	return this.Tokens
+}
+
+/*
 func (this *Lexer) NextToken() (t lexertoken.Token) {
 
 	defer func() {
@@ -170,9 +176,7 @@ func (this *Lexer) NextToken() (t lexertoken.Token) {
 			this.State = this.State(this)
 		}
 	}
-
-	panic("Lexer.NextToken reached an invalid state!!")
-}
+}*/
 
 /*
 Returns the next rune in the stream, then puts the lexer
@@ -221,4 +225,9 @@ func (this *Lexer) SkipWhitespace() {
 			break
 		}
 	}
+}
+
+func (this *Lexer) IsCharacter() bool {
+	ch := this.Next()
+	return unicode.IsLetter(ch) || string(ch) == ":"
 }

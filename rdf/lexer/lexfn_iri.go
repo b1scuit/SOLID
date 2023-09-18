@@ -15,6 +15,9 @@ func LexIri(lexer *Lexer) LexFn {
 	for {
 		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.END_IRI) {
 			lexer.Emit(lexertoken.TOKEN_IRI)
+			lexer.Pos += len(lexertoken.END_IRI)
+			lexer.Ignore()
+
 			return LexBegin
 		}
 
@@ -33,7 +36,7 @@ func LexEndLine(lexer *Lexer) LexFn {
 		l := lexer.InputToEnd()
 		if strings.HasPrefix(l, lexertoken.END_TRIPLE) {
 			lexer.Pos += len(lexertoken.END_TRIPLE)
-			lexer.Emit(lexertoken.TOKEN_END_PREFIX)
+			lexer.Emit(lexertoken.TOKEN_END_TRIPLE)
 			return LexBegin
 		}
 

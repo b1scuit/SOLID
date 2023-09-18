@@ -1,13 +1,13 @@
 package lexertoken
 
+import "fmt"
+
 type TokenType int
 
 const (
 	TOKEN_ERROR TokenType = iota
 	TOKEN_EOF
 
-	TOKEN_START_IRI
-	TOKEN_END_IRI
 	TOKEN_PREFIX
 	TOKEN_END_PREFIX
 	TOKEN_PREFIX_NAME
@@ -15,6 +15,7 @@ const (
 	TOKEN_OBJECT_LIST
 	TOKEN_END_TRIPLE
 	TOKEN_COMMENT
+	TOKEN_PREFIXED_NAME
 
 	TOKEN_IRI
 	TOKEN_BLANK_NODE
@@ -38,7 +39,27 @@ const (
 	NEWLINE = "\n"
 )
 
+var TokenMap = map[TokenType]string{
+	TOKEN_ERROR:         "Error",
+	TOKEN_EOF:           "EOF",
+	TOKEN_END_PREFIX:    "End Prefix Name(:)",
+	TOKEN_PREFIX_NAME:   "Prefix Name",
+	TOKEN_BASE:          "Base",
+	TOKEN_OBJECT_LIST:   "Object List",
+	TOKEN_END_TRIPLE:    "End Triple (.)",
+	TOKEN_COMMENT:       "Comment (#)",
+	TOKEN_IRI:           "IRI",
+	TOKEN_BLANK_NODE:    "Blank Node",
+	TOKEN_LITERAL:       "Literal",
+	TOKEN_NEWLINE:       "New Line (\n)",
+	TOKEN_PREFIXED_NAME: "Prefixed Name",
+}
+
 type Token struct {
 	Type  TokenType
 	Value string
+}
+
+func (t *TokenType) String() string {
+	return fmt.Sprintf("%T", t)
 }

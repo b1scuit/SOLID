@@ -11,8 +11,11 @@ This lexer function emits a TOKEN_VALUE with the value to be assigned
 to a key.
 */
 func LexLiteral(lexer *Lexer) LexFn {
+	lexer.Pos += len("\"")
+
 	for {
-		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.NEWLINE) {
+		if strings.HasPrefix(lexer.InputToEnd(), "\"") {
+			lexer.Pos += len("\"")
 			lexer.Emit(lexertoken.TOKEN_LITERAL)
 			return LexBegin
 		}
@@ -23,4 +26,5 @@ func LexLiteral(lexer *Lexer) LexFn {
 			return lexer.Errorf(LEXER_ERROR_UNEXPECTED_EOF)
 		}
 	}
+
 }
