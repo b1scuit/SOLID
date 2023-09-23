@@ -68,19 +68,21 @@ func LexStatement(lexer *Lexer) LexFn {
 //
 // Simple string match for this one
 func LexDirective(lexer *Lexer) LexFn {
-	if strings.HasPrefix(lexer.InputToEnd(), lexertoken.PREFIX) {
+	l := lexer.InputToEnd()
+
+	if isPrefixID(l) {
 		return LexPrefixId
 	}
 
-	if strings.HasPrefix(lexer.InputToEnd(), lexertoken.BASE) {
+	if isBase(l) {
 		return LexBase
 	}
 
-	if strings.HasPrefix(lexer.InputToEnd(), lexertoken.SPARQL_PREFIX) {
+	if isSparqlPrefix(l) {
 		return LexSparqlPrefix
 	}
 
-	if strings.HasPrefix(lexer.InputToEnd(), lexertoken.SPARQL_BASE) {
+	if isSparqlBase(l) {
 		return LexSparqlBase
 	}
 
