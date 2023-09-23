@@ -47,8 +47,15 @@ func LexStatement(lexer *Lexer) LexFn {
 
 		// If the start of the statement is an IRIREF
 		// high chance this is a triple ahead
+		// It is also the responsibility of the statement
+		// to lex the "." at the end of a triple
 		if isTriples(l) {
-			return LexTriples
+			lexer.State = LexTriples(lexer)
+			lexer.SkipWhitespace()
+			lexer.Pos += len(lexertoken.END_TRIPLE)
+			lexer.Ignore()
+
+			return lexer.State
 		}
 
 		lexer.Inc()
