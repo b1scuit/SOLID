@@ -104,10 +104,6 @@ func LexPrefixId(lexer *Lexer) LexFn {
 
 			// Lex IRI and knock off the . at the end
 			lexer.State = LexIriRef(lexer)
-			lexer.SkipWhitespace()
-			lexer.Pos += len(lexertoken.END_TRIPLE)
-			lexer.Ignore()
-
 			return lexer.State
 		}
 
