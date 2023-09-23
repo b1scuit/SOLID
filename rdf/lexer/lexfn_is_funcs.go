@@ -88,7 +88,7 @@ func isObject(s string) bool {
 }
 
 func isLiteral(s string) bool {
-	return IsRDFLiteral(s) || isNumericLiteral(s) || isBooleanLiteral(s)
+	return isRDFLiteral(s) || isNumericLiteral(s) || isBooleanLiteral(s)
 }
 
 func isBlanknodePropertyList(s string) bool {
@@ -105,7 +105,7 @@ func isNumericLiteral(s string) bool {
 
 // RDF Literal
 // ::=	String (LANGTAG | '^^' iri)?
-func IsRDFLiteral(s string) bool {
+func isRDFLiteral(s string) bool {
 	// TODO: Add Langtag and ^^
 	return isString(s)
 }
@@ -236,7 +236,7 @@ func isPercent(s string) bool {
 	return strings.HasPrefix(s, "%")
 }
 
-func IsHex(s string) bool {
+func isHex(s string) bool {
 	return unicode.IsNumber(rune(s[0])) || unicode.IsLetter(rune(s[0]))
 }
 
