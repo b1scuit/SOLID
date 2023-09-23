@@ -15,7 +15,7 @@ func LexComment(lexer *Lexer) LexFn {
 	for {
 		if strings.HasPrefix(lexer.InputToEnd(), lexertoken.NEWLINE) {
 			lexer.Emit(lexertoken.TOKEN_COMMENT)
-			return LexBegin
+			return LexStatement
 		}
 
 		lexer.Inc()

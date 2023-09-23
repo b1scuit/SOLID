@@ -35,7 +35,9 @@ func main() {
 	defer file.Close()
 
 	p, _ := parser.New()
-	p.Do(file)
+	if err := p.Do(file); err != nil {
+		l.Error("Error parsing file", slog.Any("error", err))
+	}
 
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Prefix name", "IRI"})

@@ -18,6 +18,7 @@ const (
 	TOKEN_PREFIXED_NAME
 
 	TOKEN_IRI
+	TOKEN_IRIREF
 	TOKEN_BLANK_NODE
 	TOKEN_LITERAL
 	TOKEN_NEWLINE
@@ -43,12 +44,13 @@ var TokenMap = map[TokenType]string{
 	TOKEN_ERROR:         "Error",
 	TOKEN_EOF:           "EOF",
 	TOKEN_END_PREFIX:    "End Prefix Name(:)",
-	TOKEN_PREFIX_NAME:   "Prefix Name",
+	TOKEN_PREFIX_NAME:   "prefixID",
 	TOKEN_BASE:          "Base",
 	TOKEN_OBJECT_LIST:   "Object List",
 	TOKEN_END_TRIPLE:    "End Triple (.)",
 	TOKEN_COMMENT:       "Comment (#)",
 	TOKEN_IRI:           "IRI",
+	TOKEN_IRIREF:        "IRIREF",
 	TOKEN_BLANK_NODE:    "Blank Node",
 	TOKEN_LITERAL:       "Literal",
 	TOKEN_NEWLINE:       "New Line (\n)",

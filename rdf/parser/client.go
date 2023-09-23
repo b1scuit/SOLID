@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"io"
+	"log/slog"
 	"strings"
 
 	"github.com/b1scuit/solid/rdf/lexer"
@@ -49,12 +50,13 @@ func (c *Client) Do(file io.Reader) error {
 	)
 
 	if err := c.CollectTokens(); err != nil {
-		return err
+		slog.Error("Error in collecting tokens", slog.Any("error", err))
+		//return err
 	}
 
 	c.ParsePrefixes()
 
-	c.SwapPrefixForIRI()
+	//c.SwapPrefixForIRI()
 
 	return nil
 }
@@ -72,7 +74,11 @@ func (c *Client) CollectTokens() error {
 
 	for t := range c.l.NextToken() {
 		if t.Type == lexertoken.TOKEN_ERROR {
-			return fmt.Errorf("Lexer error: %v", t.Value)
+			return fmt.Errorf("lexer error: %v", t.Value)
+		}
+
+		if t.Type == lexertoken.TOKEN_EOF {
+			break
 		}
 
 		c.lexemes = append(c.lexemes, t)
@@ -100,7 +106,7 @@ func (c *Client) ParsePrefixes() {
 func (c *Client) SwapPrefixForIRI() {
 	for i := 0; i < len(c.lexemes); i++ {
 
-		if c.lexemes[i].Type == lexertoken.TOKEN_PREFIXED_NAME {
+		if c.lexemes[i].Type == lexertoken.TOKEN_PREFIX_NAME {
 			// Does this match anything in the prefix table
 			prefix := strings.Split(c.lexemes[i].Value, ":")
 
@@ -113,3 +119,5 @@ func (c *Client) SwapPrefixForIRI() {
 		}
 	}
 }
+
+func (c *Client) FlattenPrefixObjectLists() {}
