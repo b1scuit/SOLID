@@ -6,7 +6,9 @@ import (
 	"log/slog"
 	"strings"
 
+	"github.com/b1scuit/solid/rdf/lexer"
 	"github.com/b1scuit/solid/rdf/lexer/lexertoken"
+	"github.com/b1scuit/solid/rdf/lexer/lexfn"
 )
 
 type Lexeror interface {
@@ -35,6 +37,20 @@ func New(opts ...ClientOption) (*Client, error) {
 
 	for _, f := range opts {
 		f(c)
+	}
+
+	if c.l == nil {
+		lex, err := lexer.New(
+			lexer.WihInitalState(
+				lexfn.LexTurtleDoc,
+			),
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		c.l = lex
 	}
 
 	return c, nil

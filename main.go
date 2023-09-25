@@ -5,9 +5,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/b1scuit/solid/rdf/lexer"
 	"github.com/b1scuit/solid/rdf/lexer/lexertoken"
-	"github.com/b1scuit/solid/rdf/lexer/lexfn"
 	"github.com/b1scuit/solid/rdf/parser"
 	"github.com/olekukonko/tablewriter"
 )
@@ -36,13 +34,7 @@ func main() {
 
 	defer file.Close()
 
-	lexer, _ := lexer.New(
-		lexer.WihInitalState(lexfn.LexTurtleDoc),
-	)
-
-	p, _ := parser.New(
-		parser.WithLexeror(lexer),
-	)
+	p, _ := parser.New()
 	if err := p.Do(file); err != nil {
 		l.Error("Error parsing file", slog.Any("error", err))
 	}
