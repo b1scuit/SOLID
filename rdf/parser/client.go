@@ -6,15 +6,25 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/b1scuit/solid/rdf/lexer"
 	"github.com/b1scuit/solid/rdf/lexer/lexertoken"
-	"github.com/b1scuit/solid/rdf/lexer/lexfn"
 )
+
+type Lexeror interface {
+	SetInput(string)
+	NextToken() chan lexertoken.Token
+	Run()
+}
 
 type ClientOption func(*Client)
 
+func WithLexeror(le Lexeror) ClientOption {
+	return func(c *Client) {
+		c.l = le
+	}
+}
+
 type Client struct {
-	l       *lexer.Lexer
+	l       Lexeror
 	lexemes []lexertoken.Token
 
 	prefixMap map[string]lexertoken.Token
@@ -46,10 +56,7 @@ func (c *Client) Do(file io.Reader) error {
 		return err
 	}
 
-	c.l, _ = lexer.New(
-		lexer.WithInput(string(b)),
-		lexer.WihInitalState(lexfn.LexTurtleDoc),
-	)
+	c.l.SetInput(string(b))
 
 	if err := c.CollectTokens(); err != nil {
 		slog.Error("Error in collecting tokens", slog.Any("error", err))

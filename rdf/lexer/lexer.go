@@ -33,6 +33,10 @@ type Lexer struct {
 	Width int
 }
 
+func (l *Lexer) SetInput(b string) {
+	l.Input = b
+}
+
 func New(opts ...LexerOption) (*Lexer, error) {
 	l := &Lexer{
 		Tokens: make(chan lexertoken.Token),
