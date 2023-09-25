@@ -17,6 +17,12 @@ func WithInput(i string) LexerOption {
 	}
 }
 
+func WihInitalState(lf LexFn) LexerOption {
+	return func(l *Lexer) {
+		l.State = lf
+	}
+}
+
 type Lexer struct {
 	Input  string
 	Tokens chan lexertoken.Token
@@ -29,7 +35,6 @@ type Lexer struct {
 
 func New(opts ...LexerOption) (*Lexer, error) {
 	l := &Lexer{
-		State:  LexTurtleDoc,
 		Tokens: make(chan lexertoken.Token),
 	}
 
@@ -187,7 +192,8 @@ Starts the lexical analysis and feeding tokens into the
 token channel.
 */
 func (l *Lexer) Run() {
-	for state := LexTurtleDoc; state != nil; {
+	state := l.State
+	for state := state; state != nil; {
 		state = state(l)
 	}
 

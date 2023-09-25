@@ -8,6 +8,7 @@ import (
 
 	"github.com/b1scuit/solid/rdf/lexer"
 	"github.com/b1scuit/solid/rdf/lexer/lexertoken"
+	"github.com/b1scuit/solid/rdf/lexer/lexfn"
 )
 
 type ClientOption func(*Client)
@@ -47,6 +48,7 @@ func (c *Client) Do(file io.Reader) error {
 
 	c.l, _ = lexer.New(
 		lexer.WithInput(string(b)),
+		lexer.WihInitalState(lexfn.LexTurtleDoc),
 	)
 
 	if err := c.CollectTokens(); err != nil {

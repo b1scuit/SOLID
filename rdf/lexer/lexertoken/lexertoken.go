@@ -9,6 +9,7 @@ const (
 	TOKEN_EOF
 
 	TOKEN_PREFIX
+	TOKEN_PREDICATE
 	TOKEN_END_PREFIX
 	TOKEN_PREFIX_NAME
 	TOKEN_BASE
@@ -36,6 +37,7 @@ const (
 	END_TRIPLE         = "."
 	PREFIX_END         = ":"
 	COMMENT            = "#"
+	OBJECT             = ","
 
 	NEWLINE = "\n"
 )
@@ -43,6 +45,7 @@ const (
 var TokenMap = map[TokenType]string{
 	TOKEN_ERROR:         "Error",
 	TOKEN_EOF:           "EOF",
+	TOKEN_PREDICATE:     "Predicate",
 	TOKEN_END_PREFIX:    "End Prefix Name(:)",
 	TOKEN_PREFIX_NAME:   "prefixID",
 	TOKEN_BASE:          "Base",

@@ -1,12 +1,13 @@
-package lexer
+package lexfn
 
 import (
 	"strings"
 
+	"github.com/b1scuit/solid/rdf/lexer"
 	"github.com/b1scuit/solid/rdf/lexer/lexertoken"
 )
 
-func LexComment(lexer *Lexer) LexFn {
+func LexComment(lexer *lexer.Lexer) lexer.LexFn {
 	// Remove the # at the start
 	lexer.Pos += len(lexertoken.COMMENT)
 	lexer.SkipWhitespace()
