@@ -238,11 +238,14 @@ func LexTriples(lex *lexer.Lexer) lexer.LexFn {
 // predicateObjectList
 // ::=	verb objectList (';' (verb objectList)?)*
 func LexPredicateObjectList(lex *lexer.Lexer) lexer.LexFn {
-	lex.State = LexVerb(lex)
 
 	for {
 		lex.SkipWhitespace()
 		lex.Ignore()
+
+		if isVerb(lex.CurrentInput()) {
+			lex.State = LexVerb(lex)
+		}
 
 		if isObjectList(lex.InputToEnd()) {
 			lex.State = LexObjectList(lex)
@@ -250,8 +253,11 @@ func LexPredicateObjectList(lex *lexer.Lexer) lexer.LexFn {
 
 		if strings.HasPrefix(lex.InputToEnd(), lexertoken.OBJECT_LIST) {
 			lex.Pos += len(lexertoken.OBJECT_LIST)
-			lex.Ignore() // lex.Start = lex.Pos
-			lex.State = LexPredicateObjectList(lex)
+			lex.Ignore()
+		}
+
+		if strings.HasPrefix(lex.InputToEnd(), lexertoken.END_TRIPLE) {
+			return lex.State
 		}
 
 		lex.Inc()
@@ -261,7 +267,10 @@ func LexPredicateObjectList(lex *lexer.Lexer) lexer.LexFn {
 func LexObjectList(lex *lexer.Lexer) lexer.LexFn {
 	for {
 		lex.SkipWhitespace()
-		lex.Ignore()
+
+		if strings.HasPrefix(lex.InputToEnd(), lexertoken.END_TRIPLE) || strings.HasPrefix(lexertoken.OBJECT_LIST, lex.InputToEnd()) {
+			return lex.State
+		}
 
 		if isObject(lex.InputToEnd()) {
 			lex.State = LexObject(lex)

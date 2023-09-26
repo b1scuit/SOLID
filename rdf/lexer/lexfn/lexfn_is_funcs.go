@@ -201,6 +201,9 @@ func isEChar(s string) bool {
 
 func isWs(s string) bool {
 	// TODO Expand
+	if len(s) == 0 {
+		return false
+	}
 	return unicode.IsLetter(rune(s[0]))
 }
 
@@ -209,6 +212,9 @@ func isAnon(s string) bool {
 }
 
 func isPnCharsBase(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
 	return unicode.IsLetter(rune(s[0]))
 }
 
