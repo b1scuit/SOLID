@@ -10,5 +10,6 @@
 !go.sum
 !README.md
 !.gitignore
+!flake.*
 
 !*/

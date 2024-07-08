@@ -28,7 +28,7 @@
         let
             inherit (pkgs) stdenv lib;
         in
-        stdenv.mkDerivation {
+        pkgs.mkShell {
             name = "go";
             buildInputs = [
               pkgs.cowsay
