@@ -20,9 +20,14 @@
           buildInputs = [
             pkgs.go
           ];
-          name = "main";
-          src = self;
-          buildPhase = "go build main.go";
+          name = "solid";
+          src = "./.";
+          cleanPhase = "rm -rf $sourceRoot/*";
+          unpackPhase = ''
+            sourceRoot=$PWD
+            mkdir $sourceRoot
+            cp -r $src/* $sourceRoot/
+          '';
         };
         devShells.default =
         let
